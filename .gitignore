@@ -4,5 +4,6 @@ lib/*.so
 lib/objs/*.o
 cpp/*.exe
 cpp/*.swp
+include/*.swp
 bin/funcdrvr
 
