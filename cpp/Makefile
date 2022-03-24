@@ -26,7 +26,7 @@ PRGOBJS = $(patsubst %.cpp,%.o, $(PRGCC))
 obj: $(LIBOBJS)
 
 lib: 
-	$(MAKE) -C ../lib lib || exit 1; done
+	$(MAKE) -C ../lib lib || exit 1
 
 PRGS  := $(patsubst %.cpp, %.exe, $(PRGCC) )
 
