@@ -42,31 +42,45 @@
  * 
  */
 
-#include <cmath>
-#include<complex>
+#include <string>
+
+#include "funcgenerator.h"
 #include "func1.h"
 
-twsl::Func1::
-Func1()
+twsl::FuncGenerator* twsl::FuncGenerator::instance_ = 0;
+
+twsl::FuncGenerator*
+twsl::FuncGenerator::
+instance()
+{
+    if ( !instance_ ) {
+        instance_ = new FuncGenerator();
+    }
+    return instance_;
+}
+
+twsl::FuncGenerator::
+FuncGenerator()
 {
 }
 
-twsl::Func1::
-~Func1()
+twsl::FuncGenerator::
+~FuncGenerator()
 {
 }
 
-std::complex<double>
-twsl:: Func1::val(std::complex<double> z0)
+twsl::Func*
+twsl::FuncGenerator::
+create_func(const std::string& type)
 {
-    std::complex<double> v = std::pow(z0,3) - std::complex<double>(1.0, 0.0);
-    return v;
-}
+    Func* f;
 
-std::complex<double>
-twsl:: Func1::drv(std::complex<double> z0)
-{
-    std::complex<double> v = 3.0 * std::pow(z0,2);
-    return v;
+    if        ( type == "1" ) {
+        f = new Func1();
+    } else {
+        std::cout << "FuncGenerator.create_func, invalid type = " << type << std::endl;
+        return 0;
+    }
+    return f;
 }
 

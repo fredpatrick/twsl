@@ -42,31 +42,29 @@
  * 
  */
 
-#include <cmath>
-#include<complex>
-#include "func1.h"
+#ifndef TRK_FUNCGENERATOR_HH
+#define TRK_FUNCGENERATOR_HH
 
-twsl::Func1::
-Func1()
-{
+#include <iostream>
+
+namespace twsl {
+
+class Func;
+
+class FuncGenerator {
+    public:
+        static FuncGenerator* instance();
+
+        ~FuncGenerator();
+
+        Func* create_func(const std::string& type);
+
+    protected:
+        FuncGenerator();
+
+    private:
+        static FuncGenerator* instance_;
+};
+
 }
-
-twsl::Func1::
-~Func1()
-{
-}
-
-std::complex<double>
-twsl:: Func1::val(std::complex<double> z0)
-{
-    std::complex<double> v = std::pow(z0,3) - std::complex<double>(1.0, 0.0);
-    return v;
-}
-
-std::complex<double>
-twsl:: Func1::drv(std::complex<double> z0)
-{
-    std::complex<double> v = 3.0 * std::pow(z0,2);
-    return v;
-}
-
+#endif

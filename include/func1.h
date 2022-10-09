@@ -42,22 +42,24 @@
  * 
  */
 
-#ifndef TWSL_FUNC1
-#define TWSL_FUNC1
+#ifndef TWSL_FUNC1_HH
+#define TWSL_FUNC1_HH
 
 #include <cmath>
 #include <complex>
 
+#include "func.h"
+
 namespace twsl {
 
-class Func1 {
+class Func1 : public Func{
 
     public:
         Func1();
         ~Func1();
 
         std::complex<double> val (std::complex<double>);
-        std::complex<double> dval(std::complex<double>);
+        std::complex<double> drv (std::complex<double>);
 
     private:
 };

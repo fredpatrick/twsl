@@ -44,26 +44,51 @@
 
 #include <cmath>
 #include <complex>
+#include <iomanip>
 #include <iostream>
 
-#include "func1.h"
-
+#include "func.h"
+#include "funcgenerator.h"
+#include "twslutl.h"
 
 int main(int argc, char* argv[]) {
     std::cout << "\n\n\n\n\n" << std::endl;
     std::cout << "##############################################################" << std::endl;
     std::cout << "################### funcdrvr begins" << std::endl;
 
-    twsl::Func1* f1 = new twsl::Func1();
-    std::complex<double> z(1.0,1.0);
+    twsl::FuncGenerator * fgen = twsl::FuncGenerator::instance();
+
+    std::string type = "1";
+
+    twsl::Func* f = fgen->create_func(type);
+    double               r;
+    double               t;
+    double               PI = 4.0 * std::atan(double{1.0});
+    std::complex<double> z;
+    std::complex<double> z0;
     std::complex<double> zval;
     std::complex<double> dzval;
-    try {
-        std::complex<double> zval  = f1->val(zval);
-        std::complex<double> dzval = f1->dval(zval);
 
-    } catch ( std::exception&  e ) {
-        std::cout << "funcdrvr, main: failed with exception"  << std::endl;
+    std::cout << "Enter r:" << std::endl;
+    std::cin >> r;
+    for (int i = 0; i < 12; i++) {
+        double theta = (i * 30.) * twsl::PI_ / 180.0;
+        std::complex<double> dz = std::polar(r, theta); 
+        z0 = dz + std::complex<double>(1.0, 0.0);
+        try {
+            zval  = f->val(z0);
+            dzval = f->drv(z0);
+
+        } catch ( std::exception&  e ) {
+            std::cout << "funcdrvr, main: failed with exception"  << std::endl;
+        }
+/*
+#       double ang = arg(zval)  * 180.0 / twesl::PI_;
+#       std::cout << dz << std::setw(20) << std::setw(20) << z0 
+#                 << std::setw(10) << abs(zval) << std::setw(10) <<  ang<< std::endl;
+*/
+        twsl::PolarZ zz{zval};
+        std::cout  << zz << std::endl;
     }
     std::cout << "############### funcdrvr exiting" << std::endl;
     return 0;

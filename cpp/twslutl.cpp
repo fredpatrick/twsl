@@ -41,32 +41,25 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
+ 
 
-#include <cmath>
-#include<complex>
-#include "func1.h"
+ #include <complex>
+ #include <iostream>
+ #include <iomanip>
 
-twsl::Func1::
-Func1()
-{
+ #include "twslutl.h"
+
+
+ std::ostream&
+ twsl::operator<<( std::ostream& ostrm, const twsl::PolarZ& v) 
+ {
+    std::cout.width(10);
+    std::cout.precision(4);
+    std::cout << std::fixed;
+    std::cout << std::abs(v.z); 
+
+    std::cout.width(8);
+    std::cout.precision(1);
+    std::cout << std::fixed;
+    std::cout << std::arg(v.z) * 180. / twsl::PI_; 
 }
-
-twsl::Func1::
-~Func1()
-{
-}
-
-std::complex<double>
-twsl:: Func1::val(std::complex<double> z0)
-{
-    std::complex<double> v = std::pow(z0,3) - std::complex<double>(1.0, 0.0);
-    return v;
-}
-
-std::complex<double>
-twsl:: Func1::drv(std::complex<double> z0)
-{
-    std::complex<double> v = 3.0 * std::pow(z0,2);
-    return v;
-}
-

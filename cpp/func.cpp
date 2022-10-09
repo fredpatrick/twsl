@@ -42,31 +42,9 @@
  * 
  */
 
-#include <cmath>
-#include<complex>
-#include "func1.h"
+ #include "func.h"
 
-twsl::Func1::
-Func1()
-{
-}
-
-twsl::Func1::
-~Func1()
-{
-}
-
-std::complex<double>
-twsl:: Func1::val(std::complex<double> z0)
-{
-    std::complex<double> v = std::pow(z0,3) - std::complex<double>(1.0, 0.0);
-    return v;
-}
-
-std::complex<double>
-twsl:: Func1::drv(std::complex<double> z0)
-{
-    std::complex<double> v = 3.0 * std::pow(z0,2);
-    return v;
-}
-
+ twsl::Func::
+ ~Func()
+ {
+ }

@@ -42,31 +42,28 @@
  * 
  */
 
+#ifndef TWSL_FUNC_HH
+#define TWSL_FUNC_HH
+
 #include <cmath>
-#include<complex>
-#include "func1.h"
+#include <complex>
+#include <iostream>
 
-twsl::Func1::
-Func1()
-{
+#include "twslutl.h"
+
+namespace twsl {
+
+class Func {
+
+    public:
+        virtual ~Func();
+
+        virtual std::complex<double>    val (std::complex<double>) = 0;
+        virtual std::complex<double>    drv (std::complex<double>) = 0;
+
+    private:
+};
+
 }
 
-twsl::Func1::
-~Func1()
-{
-}
-
-std::complex<double>
-twsl:: Func1::val(std::complex<double> z0)
-{
-    std::complex<double> v = std::pow(z0,3) - std::complex<double>(1.0, 0.0);
-    return v;
-}
-
-std::complex<double>
-twsl:: Func1::drv(std::complex<double> z0)
-{
-    std::complex<double> v = 3.0 * std::pow(z0,2);
-    return v;
-}
-
+#endif

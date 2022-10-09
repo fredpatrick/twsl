@@ -43,30 +43,57 @@
  */
 
 #include <cmath>
-#include<complex>
-#include "func1.h"
+#include <complex>
+#include <iomanip>
+#include <iostream>
 
-twsl::Func1::
-Func1()
-{
+#include "func.h"
+#include "funcgenerator.h"
+#include "twslutl.h"
+#include "ziterator.h"
+
+int main(int argc, char* argv[]) {
+    std::cout << "\n\n\n\n\n" << std::endl;
+    std::cout << "##############################################################" << std::endl;
+    std::cout << "################### funciterator begins" << std::endl;
+
+    twsl::FuncGenerator * fgen = twsl::FuncGenerator::instance();
+
+    std::cout << "Enter fuction type:";
+    std::string ftype;
+    std::cin >> ftype;
+
+    twsl::Func* func = fgen->create_func(ftype);
+    twsl::ZIterator* ziter = new twsl::ZIterator(func);
+    bool stop = false;
+    while ( !stop ) {
+        std::string yesno;
+        std::cout << "Continue (y/n) :";
+        std::cin  >> yesno;
+        if ( yesno == "y" ) {
+            std::cout << "Enter starting z: ";
+            std::complex<double> z0;
+            std::cin  >> z0;
+
+            int niter = 0;
+            while (niter < 20) {
+                twsl::PolarZ pz0 = {z0};
+                std::complex<double> f0 = func->val(z0);
+                twsl::PolarZ pf0 = {f0};
+
+                std::complex<double> d  = ziter->delta(z0);
+                std::complex<double> zn = z0 + d;
+                std::cout << niter << pz0 << pf0 << 
+                             twsl::PolarZ{d} << twsl::PolarZ{zn} << std::endl;
+
+                z0    =  zn;
+                niter += 1;
+            }
+        } else {
+            stop = true;
+        }
+    }
+    return 0;
 }
 
-twsl::Func1::
-~Func1()
-{
-}
-
-std::complex<double>
-twsl:: Func1::val(std::complex<double> z0)
-{
-    std::complex<double> v = std::pow(z0,3) - std::complex<double>(1.0, 0.0);
-    return v;
-}
-
-std::complex<double>
-twsl:: Func1::drv(std::complex<double> z0)
-{
-    std::complex<double> v = 3.0 * std::pow(z0,2);
-    return v;
-}
 

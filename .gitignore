@@ -6,4 +6,5 @@ cpp/*.exe
 cpp/*.swp
 include/*.swp
 bin/funcdrvr
-
+pat
+bin/funciterator
