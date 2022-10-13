@@ -60,7 +60,6 @@ namespace twsl {
 
 std::ostream&
 operator<<( std::ostream& ostrm, const twsl::PolarZ& z);
-
 }
 
 

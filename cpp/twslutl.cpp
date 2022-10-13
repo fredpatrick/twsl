@@ -62,4 +62,7 @@
     std::cout.precision(1);
     std::cout << std::fixed;
     std::cout << std::arg(v.z) * 180. / twsl::PI_; 
+
+    return ostrm;
 }
+
