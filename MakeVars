@@ -1,30 +1,44 @@
-#
-# gmake variables common to all qci Makefile's
+# gmake variables common to all twsl Makefile's
 #
 
 .SUFFIXES: .exe
 
-#PRJDIR   = /home/fredpatrick/wrk/trk
+#PRJDIR   = /home/fredpatrick/wrk/twsl
 PRJDIR    = $(HOME)/wrk/twsl
 TWSL_DIR  = $(PRJDIR)
-#TRKU_DIR = $(HOME)/wrk/trku
-
 
 TWSL_LIB_DIR    = $(TWSL_DIR)/lib
-TRKU_LIB_DIR  = $(TRKU_DIR)/lib
-
-ALL_LIB_DIRS   = $(TWSL_LIB_DIR) $(TRKU_LIB_DIR)
+ALL_LIB_DIRS   = $(TWSL_LIB_DIR)
 
 TWSL_VERSION     = $(shell tr b \. < $(TWSL_DIR)/VERSION)
-#TRKU_VERSION     = $(shell tr b \. < $(TRKU_DIR)/VERSION)
 
-CXX             = g++ 
-CXXFLAGS        = -fPIC -fexceptions -O -ftemplate-depth-40 -pthread -std=c++11
-INCFLAGS        = -I.  -I$(TWSL_DIR)/include 
-LIBFLAGS        = -shared -fPIC
+ifeq ($(shell uname -s),Linux)
+    CXX       = g++
+    CXXFLAGS        =   -fPIC -fexceptions -O -ftemplate-depth-40 -pthread
+    LIBFLAGS        = -shared -fPIC
+    CONFLIBS        = -ldl -lm -lpthread
+    LDLIBS          = -L$(TWSL_LIB_DIR) -ltwsl$(TWSL_VERSION) \
+                            $(CONFLIBS)
+
+else 
+    SDKDIR    = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk 
+    CXX       = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
+    CXXFLAGS  = -pipe -g -isysroot $(SDKDIR) -mmacosx-version-min=10.7 -std=c++11 -Wall -W -fPIE
+    LFLAGS    = -headerpad_max_install_names -Wl,-syslibroot,$(SDKDIR) \
+                 -mmacosx-version-min=10.7 -Wl,-rpath,/Users/fredpatrick/Qt/5.4/clang_64/lib
+    LIBFLAGS  = -shared -fPIC $(LFLAGS)
+    LDFLAGS   = -headerpad_max_install_names -Wl,-syslibroot,$(SDKDIR) \
+                  -mmacosx-version-min=10.7 -Wl,-rpath,/Users/fredpatrick/Qt/5.4/clang_64/lib
+    LDLIBS    = $(SUBLIBS) -F/Users/fredpatrick/Qt/5.4/clang_64/lib \
+                      -L/Users/fredpatrick/wrk/twsl/lib -ltwsl0.0 \
+                      -framework QtWidgets -framework QtGui -framework QtCore \
+                      -framework DiskArbitration -framework IOKit \
+                      -framework QtNetwork -framework OpenGL -framework AGL
+endif
+INCFLAGS        = -I.  -I$(TWSL_DIR)/include
 
 CPPFLAGS        =
-CPP             = cpp -D__GNUC__
+#CPP             = cpp -D__GNUC__
 
 SHELL           = /bin/sh 
 AR              = ar
@@ -34,8 +48,4 @@ RM              = rm -f
 LN              = ln -f -s 
 IDIRCMD         = $(TWSL_DIR)/admin/mkinstalldirs
 MAKE_DEPS       = $(TWSL_DIR)/admin/DotHDeps
-CONFLIBS        = -ldl -lm -lpthread
-
-LDLIBS          = -L$(TWSL_LIB_DIR) -ltwsl$(TWSL_VERSION) \
-                  $(CONFLIBS)
 

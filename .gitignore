@@ -5,6 +5,7 @@ lib/objs/*.o
 cpp/*.exe
 cpp/*.swp
 include/*.swp
+cpp/tmp
 bin/funcdrvr
 pat
 bin/funciterator

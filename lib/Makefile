@@ -5,12 +5,12 @@
 include ../MakeVars
 
 
-lib: libtwsl$(TRKWSL_VERSION).so
+lib: libtwsl$(TWSL_VERSION).so
 
-libtwsl$(TRKWSL_VERSION).so : $(wildcard ./objs/*.o)
+libtwsl$(TWSL_VERSION).so : $(wildcard ./objs/*.o)
 	$(CXX) $(LIBFLAGS) -o $@ $(wildcard ./objs/*.o)
 
 clean: 
-	$(RM) libtwsl$(TRKWSL_VERSION).so
+	$(RM) libtwsl$(TWSL_VERSION).so
 	$(RM) ./objs/*.o
 
