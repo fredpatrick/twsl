@@ -85,6 +85,7 @@ listen_for_connection(int portno)
 
         TSocket* sckt = new TSocket(socket_fd);
         PacketResponder* pr = new PacketResponder(sckt, shutdown_);
+        sckt->wait_for_packet(pr);
     }
     std::cout << "TSocketFactory::listening, loop exitted" << std::endl;
     return;
@@ -100,9 +101,9 @@ stop_listening()
 
 twsl::TSocket*
 twsl::TSocketFactory::
-connect(const std::string& wsl_ip)
+connect(const std::string& wsl_ip, int portno)
 {
-    tsckt* = new TSocket(wsl_ip, 17303);
+    TSocket*tsckt = new TSocket(wsl_ip, portno);
     return tsckt;
 }
 

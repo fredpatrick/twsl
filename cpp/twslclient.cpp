@@ -18,7 +18,7 @@ int main ( int argc, char* argv[])
     std::cout << "Enter wsl_ip from server:";
     std::string wsl_ip;
     std::cin >> wsl_ip;
-    twsl::TSocketFactory* tsf     = twsl::TSocketFactory.instance();
+    twsl::TSocketFactory* tsf     = twsl::TSocketFactory::instance();
     twsl::TSocket*        tsocket = tsf->connect(wsl_ip,17303);
     std::cout << "twslClient, connection made to " << wsl_ip << std::endl;
 
@@ -28,8 +28,8 @@ int main ( int argc, char* argv[])
         std::cout << "Enter continue(c) or quit (q): ";
         std::cin  >> cmd;
         if (cmd == "c") {
-            twsl::PacketBuffer* pbfr =  twsl::PacketBuffer("C");
-            stdf::cout << "twslClient: Enter mesaage: ";
+            twsl::PacketBuffer* pbfr =  new twsl::PacketBuffer("C");
+            std::cout << "twslClient: Enter mesaage: ";
             std::string message;
             std::cin >> message;
             pbfr->strdat(message);

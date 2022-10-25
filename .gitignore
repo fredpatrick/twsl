@@ -9,3 +9,5 @@ cpp/tmp
 bin/funcdrvr
 pat
 bin/funciterator
+bin/twslserver
+bin/twslclient

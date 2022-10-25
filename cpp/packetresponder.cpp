@@ -12,8 +12,9 @@ twsl::PacketResponder::
 PacketResponder(TSocket* tsocket, 
                          bool& shutdown) : shutdown_(shutdown)
 {
-    tsocket_   = tsocket;
-    socket_fd_ = tsocket_->socket_fdi();
+    tsocket_      = tsocket;
+    socket_fd_    = tsocket_->socket_fd();
+    packet_count_ = 0;
     tsocket_->wait_for_packet(this);        //  When tsocket in server mode receives a packet
                                             // then packet will be called to respond
     std::cout << "PacketResponder.ctor, tsocket thread created" << std::endl;
@@ -23,6 +24,13 @@ PacketResponder(TSocket* tsocket,
 twsl::PacketResponder::
 ~PacketResponder()
 {
+}
+
+twsl::TSocket*
+twsl::PacketResponder::
+tsocket()
+{
+    return tsocket_;
 }
 
 int
@@ -52,7 +60,7 @@ packet(int ierr)
         std::cout << "PacketResponder.packet, client message is: " << clnt_msg << std::endl;
         delete pbfr;
         packet_count_++;
-        pbfr = new pbfr("S");
+        pbfr = new PacketBuffer("S");
         pbfr->intdat(packet_count_);
         pbfr->strdat(clnt_msg);
         tsocket_->write(pbfr);

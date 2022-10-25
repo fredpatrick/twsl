@@ -2,21 +2,22 @@
 #ifndef TWSL_TSOCKETFACTORY_HH
 #define TWSL_TSOCKETFACTORY_HH
 
+#include <string>
+
 namespace twsl
 {
-    class TSocketFactory;
+    class TSocket;
+
+    class TSocketFactory
     {
-        class TSocket;
 
         public:
-            
             static TSocketFactory* instance();
-
             ~TSocketFactory();
 
             void                       listen_for_connection(int portno);
             void                       stop_listening();
-            TSocket*                   connect(int wsl_ip, int portno);
+            TSocket*                   connect(const std::string& wsl_ip, int portno);
 
         protected:
             TSocketFactory();

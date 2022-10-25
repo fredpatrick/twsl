@@ -12,13 +12,16 @@ namespace twsl {
             PacketResponder(TSocket* tsocket, bool& shutdown);
             ~PacketResponder();
 
-            virtual void    packet(int ierr) = 0;
+            void     packet(int ierr);
 
-            int             socket_fd();
+            int      socket_fd();
+            TSocket* tsocket();
 
         protected:
-            int  socket_fd_;
-            bool shutdown_;
+            int      socket_fd_;
+            bool     shutdown_;
+            TSocket* tsocket_;
+            int      packet_count_;
         private:
     };
 }

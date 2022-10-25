@@ -27,7 +27,7 @@ TSocket(const std::string& host_ip_addr, int portno)
     socket_type_ = "client";
     socket_fd_ = ::socket(AF_INET, SOCK_STREAM, 0);
     std::cout << "TSocket.ctor, socket_fd = " << socket_fd_ << 
-                                socket_type = " << socket_type_ << std::endl;
+                              " socket_type = " << socket_type_ << std::endl;
     struct sockaddr_in     serv_addr;
     ::memset(&serv_addr, 0, sizeof(serv_addr));
 
@@ -109,10 +109,8 @@ int
 twsl::TSocket::
 wait_for_packet(PacketResponder* packet_responder)
 {
-    std::cout << "TSocket:wait_for_packed called, socket_fd = " <<
-                    packet_server->socket_fd()  << std::endl;
+    std::cout << "TSocket:wait_for_packed called, socket_fd = " << socket_fd_ << std::endl;
     thread_running_ = true;
-    packet_server_     = packet_server;
     if( ::pthread_create(&packet_thread_, NULL,
                          &threaded_poll,
                          static_cast<void*>(packet_responder)) ) {
@@ -130,9 +128,10 @@ twsl::TSocket::
 threaded_poll(void* attr)
 {
     std::cout << "TSocket.threaded_poll-begin" << std::endl;
-    TSocket* ss = static_cast<TSocket*>(attr);
-    while ( ss->thread_running_ ) {
-        ss->packet_server_->packet(ss->wait_for_packet());
+    PacketResponder* pr = static_cast<PacketResponder*>(attr);
+    TSocket* tsocket = pr->tsocket();
+    while ( tsocket->thread_running_ ) {
+        pr->packet(tsocket->wait_for_packet() );
         std::cout << "TSocket.threaded_poll processed packet" << std::endl;
     }
     return 0;

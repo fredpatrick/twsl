@@ -10,7 +10,7 @@ namespace twsl
     class PacketResponder;
     class PacketBuffer;
 
-    class TSocket;
+    class TSocket
     {
         public:
             TSocket(int   socket_fd);
@@ -26,6 +26,7 @@ namespace twsl
             int              wait_for_packet();
         private:
             int              socket_fd_;
+            std::string      socket_type_;
 
             static void*     threaded_poll(void* attr);
             pthread_t        packet_thread_;
