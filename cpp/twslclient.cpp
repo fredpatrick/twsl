@@ -6,6 +6,7 @@
 #include <bitset>
 #include <iostream>
 
+#include "eventexception.h"
 #include "tsocketfactory.h"
 #include "tsocket.h"
 #include "packetbuffer.h"
@@ -25,7 +26,7 @@ int main ( int argc, char* argv[])
     bool finished = false;
     while ( !finished ) {
         std::string cmd;
-        std::cout << "Enter continue(c) or quit (q): ";
+        std::cout << "Enter continue(c) or exit this client (q) or terminate server (e): ";
         std::cin  >> cmd;
         if (cmd == "c") {
             twsl::PacketBuffer* pbfr =  new twsl::PacketBuffer("C");
@@ -33,22 +34,36 @@ int main ( int argc, char* argv[])
             std::string message;
             std::cin >> message;
             pbfr->strdat(message);
-            tsocket->write(pbfr);
+            try {
+                tsocket->write(pbfr);
+            } catch ( twsl::EventException r) {
+                std::cout << "twslClient:writing message:" << message << " failed" << std::endl;
+                std::cout << r.reason() <<std::endl;
+            }
             delete pbfr;
+            std::cout << "twslClient: wrote message, message = " << message << std::endl;
 
-            pbfr = tsocket->read();
-
+            try {
+                pbfr = tsocket->read();
+            } catch ( twsl::EventException r) {
+                std::cout << "twslClient: reading return message failed" << std::endl;
+                std::cout << r.reason() << std::endl;
+                continue;
+            }
             std::cout << "twslClient, return message received" << std::endl;
             int packet_count           = pbfr->intdat();
             std::string return_message = pbfr->strdat();
             std::cout << "twslClient: packet_count = "   << packet_count << std::endl;
             std::cout << "twslClient: return_message = " << return_message << std::endl;
-            tsocket->write(pbfr);
             delete pbfr;
         } else if ( cmd == "q" ) {
             twsl::PacketBuffer* pbfr = new twsl::PacketBuffer("Q");
             tsocket->write(pbfr);
-            std::cout << "twslClient, shutdown command sent to twslServer" << std::endl;
+            std::cout << "twslClient, shutdown connection  sent to twslServer" << std::endl;
+            finished = true;
+        } else if (cmd == "e" ) {
+            twsl::PacketBuffer* pbfr = new twsl::PacketBuffer("E");
+            tsocket->write(pbfr);
             delete pbfr;
             finished = true;
         }

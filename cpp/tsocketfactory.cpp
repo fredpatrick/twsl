@@ -46,14 +46,11 @@ listen_for_connection(int portno)
     shutdown_            = false;
 
     portno_ = portno;
-    std::cout << "TSocketFactory.listen_for_connection, portno = " << portno_ << std::endl;
     listen_fd_ = ::socket(AF_INET, SOCK_STREAM, 0);
     if ( listen_fd_ == -1) {
         ::perror("socket");
         // need to throw exception here
     }
-    std::cout << "TSocketFactory.listen_for_connection, listen_fd = " << 
-                                                           listen_fd_ << std::endl;
     struct sockaddr_in      serv_addr;
     ::memset(&serv_addr, 0, sizeof(serv_addr) );
     serv_addr.sin_family        = AF_INET;
@@ -68,12 +65,8 @@ listen_for_connection(int portno)
     std::cout << "TSocketFactory.listen_for_connection, listening on portno = " << 
                                             portno_ << std::endl;
     ::listen(listen_fd_, 10);
-    std::cout << "TSocketFactory.listen_for_connection, listen_fd = " << 
-                                                           listen_fd_ << std::endl;
 
     while (!shutdown_) {
-        std::cout << "TSocketFactory.listen_for_connection, listen_fd = " << 
-                                                               listen_fd_ << std::endl;
         int socket_fd = accept(listen_fd_, (struct sockaddr*)NULL, NULL);
         if ( socket_fd == -1 ) {
             std::cout << "TSocketFactory.listen_for_connection, accept error: " << 
@@ -85,7 +78,6 @@ listen_for_connection(int portno)
 
         TSocket* sckt = new TSocket(socket_fd);
         PacketResponder* pr = new PacketResponder(sckt, shutdown_);
-        sckt->wait_for_packet(pr);
     }
     std::cout << "TSocketFactory::listening, loop exitted" << std::endl;
     return;

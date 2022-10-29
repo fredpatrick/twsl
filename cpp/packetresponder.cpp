@@ -49,12 +49,10 @@ packet(int ierr)
         pbfr = tsocket_->read();
     } catch ( EventException r ) {
         std::cout << "PacketResponder.packet: " << r.reason() << std::endl;
-        std::cout << "PacketResponder.packet, deleting drivers" << std::endl;
         ::pthread_exit(0);
     }
 
     std::string tag = pbfr->tag();
-    std::cout << "PacketResponder.packet, received packet, tag = " << tag << std::endl;
     if ( tag == "C" ) {
         std::string clnt_msg = pbfr->strdat();
         std::cout << "PacketResponder.packet, client message is: " << clnt_msg << std::endl;
@@ -66,10 +64,11 @@ packet(int ierr)
         tsocket_->write(pbfr);
 
     } else if ( tag == "Q" ) {
+        delete tsocket_;
+        ::pthread_exit(0);
+    } else if ( tag == "E" ) {
         TSocketFactory* tf = TSocketFactory::instance();
         tf->stop_listening();
-        shutdown_ = true;
-        ::pthread_exit(0);
     }
 }
 

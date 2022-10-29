@@ -66,7 +66,7 @@ write(PacketBuffer* ebfr)
     int nl = ::write( socket_fd_, &bfrlen, sizeof(int) );
     if ( nl != sizeof(int) ) {
         std::ostringstream ost;
-        ost << "TSocket:write, error writing bfrlen, ns = " << nl;
+        ost << "TSocket:write, error writing bfrlen, nl = " << nl;
         throw EventException(ost.str() );
     }
     int ns = ::write( socket_fd_, bfr, bfrlen);
@@ -127,7 +127,6 @@ void*
 twsl::TSocket::
 threaded_poll(void* attr)
 {
-    std::cout << "TSocket.threaded_poll-begin" << std::endl;
     PacketResponder* pr = static_cast<PacketResponder*>(attr);
     TSocket* tsocket = pr->tsocket();
     while ( tsocket->thread_running_ ) {
@@ -169,7 +168,6 @@ wait_for_packet()
                                          "\"" << errmsg << "\"";
         throw EventException(ost.str() );
     }
-    std::cout << "TSocket::wait_for_packet(), received event" << std::endl;
     return 0;
 }
 
